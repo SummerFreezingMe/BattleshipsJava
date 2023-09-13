@@ -79,12 +79,76 @@ public class Player {
             int maxX = Math.max(leftSquare.getX(), rightSquare.getX());
             int minX = Math.min(leftSquare.getX(), rightSquare.getX());
             for (int g = minX; g < maxX + 1; g++) {
+                if (collisionCheck(leftSquare.getX() - 1, g)) {
+                    throw new RuntimeException();
+                }
                 field.getField()[leftSquare.getX() - 1][g].setStatus(SquareStatus.SHIP);
             }
         } else {
-            throw new IllegalArgumentException();
+            throw new RuntimeException();
         }
         ship.setLeft(leftSquare);
         ship.setRight(rightSquare);
+    }
+
+    private boolean collisionCheck(int x, int y) {
+        Square[][] field = getField().getField();
+        //todo: rework
+        if (x == 0) {
+            if (y == 0) {
+                return field[0][1].getStatus() != SquareStatus.SHIP && field[1][1].getStatus() != SquareStatus.SHIP &&
+                        field[1][0].getStatus() != SquareStatus.SHIP;
+            } else if (y == Field.FIELD_SIZE - 1) {
+                return field[0][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[1][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP;
+
+            } else {
+                return field[0][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[1][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[1][y].getStatus() != SquareStatus.SHIP &&
+                        field[1][y + 1].getStatus() != SquareStatus.SHIP &&
+                        field[0][y + 1].getStatus() != SquareStatus.SHIP;
+            }
+        } else if (x == Field.FIELD_SIZE - 1) {
+            if (y == 0) {
+                return field[Field.FIELD_SIZE - 1][1].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 2][1].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 1][0].getStatus() != SquareStatus.SHIP;
+            } else if (y == Field.FIELD_SIZE - 1) {
+                return field[Field.FIELD_SIZE - 1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 2][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 2][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP;
+            } else {
+                return field[Field.FIELD_SIZE - 1][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 2][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 2][y].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 2][y + 1].getStatus() != SquareStatus.SHIP &&
+                        field[Field.FIELD_SIZE - 1][y + 1].getStatus() != SquareStatus.SHIP;
+            }
+        } else {
+            if (y == 0) {
+                return field[x - 1][0].getStatus() != SquareStatus.SHIP &&
+                        field[x - 1][1].getStatus() != SquareStatus.SHIP &&
+                        field[x][1].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][1].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][0].getStatus() != SquareStatus.SHIP;
+            } else if (y == Field.FIELD_SIZE - 1) {
+                return field[x - 1][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP &&
+                        field[x - 1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[x][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP;
+            } else {
+                return field[x - 1][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[x][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][y - 1].getStatus() != SquareStatus.SHIP &&
+                        field[x - 1][y].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][y].getStatus() != SquareStatus.SHIP &&
+                        field[x - 1][y + 1].getStatus() != SquareStatus.SHIP &&
+                        field[x][y + 1].getStatus() != SquareStatus.SHIP &&
+                        field[x + 1][y + 1].getStatus() != SquareStatus.SHIP;
+            }
+        }
     }
 }
