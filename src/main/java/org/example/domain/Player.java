@@ -1,15 +1,18 @@
 package org.example.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Objects;
 
 @AllArgsConstructor
 public class Player {
-    String name;
-    boolean isAutoFill;
-    boolean isBot;
+    private String name;
+    private boolean isAutoFill;
+    private boolean isBot;
 
+    @Getter
+    private Field field;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
