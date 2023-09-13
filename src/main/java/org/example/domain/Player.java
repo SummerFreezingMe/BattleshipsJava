@@ -51,10 +51,13 @@ public class Player {
         //todo: print out some rules
         Scanner sc = new Scanner(System.in);
         List<Ship> fleet = Ship.listOfShips();
+        int fleetHealth=0;
         //todo: autogeneration
         for (Ship ship : fleet) {
             placeShip(ship, sc);
+            fleetHealth+=ship.getLength();
         }
+        field.setFleetHealth(fleetHealth);
         field.drawBoard(this.field.getField());
     }
 

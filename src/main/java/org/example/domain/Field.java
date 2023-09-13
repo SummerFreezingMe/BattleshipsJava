@@ -1,15 +1,20 @@
 package org.example.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
+
 @Getter
 public class Field {
-    private Square[][] field;
+    private final Square[][] field;
 
-    private static final int FIELD_SIZE = 10;
+    public static final int FIELD_SIZE = 10;
+@Setter
+    private int fleetHealth;
 
+    public Field(Square[][] field) {
+        this.field = field;
+    }
 
     public static Field initField() {
         Square[][] field = new Square[FIELD_SIZE][FIELD_SIZE];
