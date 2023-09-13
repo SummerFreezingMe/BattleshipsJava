@@ -2,18 +2,20 @@ package org.example.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 @AllArgsConstructor
+@Getter
+@Setter
 public class Player {
     private String name;
     private boolean isAutoFill;
     private boolean isBot;
 
-    @Getter
     private Field field;
 
     @Override
@@ -61,7 +63,6 @@ public class Player {
         System.out.println(this.name + ", please, locate your " + ship.name() + " | length: " + ship.getLength());
         String location = sc.nextLine().toUpperCase();
         String[] squares = location.split(" ");
-        //todo: collision check
         Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
                 [Character.getNumericValue(squares[0].charAt(1))];
         Square rightSquare = field.getField()[squares[1].charAt(0) - 65]
