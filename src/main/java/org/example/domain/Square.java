@@ -8,7 +8,7 @@ public class Square {
     int y;
     SquareStatus status;
 
-    private enum SquareStatus {
+    enum SquareStatus {
         CLOSED,
         SHIP,
         REVEALED,
