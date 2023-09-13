@@ -8,8 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Square {
-    int x;
-    int y;
-    SquareStatus status;
+    private int x;
+    private int y;
+    private SquareStatus status;
 
 }
