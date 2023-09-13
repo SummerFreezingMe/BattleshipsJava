@@ -9,20 +9,23 @@ public class Game implements Runnable {
 
     @Override
     public void run() {
-        boolean isSinglePlayer;
-        System.out.println("Choose player's amount (1/2):");
-        int playersAmount = scanner.nextInt();
-        scanner.nextLine();
-        if (playersAmount == 2 || playersAmount == 1) {
-            isSinglePlayer = playersAmount == 1;
-        } else {
-            throw new ArithmeticException();
-        }
+        boolean isSinglePlayer = gameModeCheck();
         Player first = initPlayer(1, false);
         Player second = initPlayer(2, isSinglePlayer);
         System.out.println(first);
         System.out.println(second);
 
+    }
+
+    private boolean gameModeCheck() {
+        System.out.println("Choose player's amount (1/2):");
+        int playersAmount = scanner.nextInt();
+        scanner.nextLine();
+        if (playersAmount == 2 || playersAmount == 1) {
+            return playersAmount == 1;
+        } else {
+            throw new ArithmeticException();
+        }
     }
 
     //todo: custom input exceptions
