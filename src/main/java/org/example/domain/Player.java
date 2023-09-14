@@ -55,37 +55,45 @@ public class Player {
         int fleetHealth = 0;
 
         for (Ship ship : fleet) {
-            if (isAutoFill) {
-                autoPlacement(ship);
-            } else {
-                placeShip(ship, sc);
+            boolean placed = false;
+            while (!placed) {
+                if (isAutoFill) {
+                    placed = autoPlacement(ship);
+                } else {
+                    placed = placeShip(ship, sc);
+                }
+                fleetHealth += ship.getLength();
             }
-            fleetHealth += ship.getLength();
             field.setFleetHealth(fleetHealth);
             field.drawBoard(this.field.getField(), false);
         }
     }
 
-    private void placeShip(Ship ship, Scanner sc) {
+    private boolean placeShip(Ship ship, Scanner sc) {
         //todo: stringbuilder, perhaps enum toString
         System.out.println(this.name + ", please, locate your " + ship.name() + " | length: " + ship.getLength());
         String location = sc.nextLine().toUpperCase();
-        placementAttempt(ship, location);
-
+        return placementAttempt(ship, location);
     }
 
-    private void placementAttempt(Ship ship, String location) {
+    private boolean placementAttempt(Ship ship, String location) {
         String[] squares = location.split(" ");
-        Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
-                [Character.getNumericValue(squares[0].charAt(1))];
-        Square rightSquare = field.getField()[squares[1].charAt(0) - 65]
-                [Character.getNumericValue(squares[1].charAt(1))];
+        Square leftSquare = field.getField()[squares[0].charAt(0) - 66]
+                [squares[0].charAt(1) - '1'];
+        Square rightSquare = field.getField()[squares[1].charAt(0) - 66]
+                [squares[1].charAt(1) - '1'];
         if (leftSquare.getX() == rightSquare.getX() &&
                 Math.abs(leftSquare.getY() - rightSquare.getY()) == ship.getLength() - 1) {
             int maxY = Math.max(leftSquare.getY(), rightSquare.getY()) - 1;
             int minY = Math.min(leftSquare.getY(), rightSquare.getY()) - 1;
             for (int g = minY; g < maxY + 1; g++) {
-                field.getField()[g][leftSquare.getY() - 1].setStatus(SquareStatus.SHIP);
+                if (collisionCheck(leftSquare.getX(), g)) {
+                    System.out.println("Uh oh, you can't put it there!");
+                    return false;
+                }
+            }
+            for (int g = minY; g < maxY + 1; g++) {
+                field.getField()[leftSquare.getY()][g].setStatus(SquareStatus.SHIP);
             }
 
         } else if (leftSquare.getY() == rightSquare.getY() &&
@@ -93,16 +101,20 @@ public class Player {
             int maxX = Math.max(leftSquare.getX(), rightSquare.getX());
             int minX = Math.min(leftSquare.getX(), rightSquare.getX());
             for (int g = minX; g < maxX + 1; g++) {
-                if (collisionCheck(leftSquare.getX() - 1, g)) {
-                    throw new RuntimeException();
+                if (!collisionCheck(g, leftSquare.getY())) {
+                    System.out.println("Uh oh, you can't put it there!");
+                    return false;
                 }
-                field.getField()[leftSquare.getX() - 1][g].setStatus(SquareStatus.SHIP);
+            }
+            for (int g = minX; g < maxX + 1; g++) {
+                field.getField()[g][leftSquare.getY()].setStatus(SquareStatus.SHIP);
             }
         } else {
             throw new RuntimeException();
         }
         ship.setLeft(leftSquare);
         ship.setRight(rightSquare);
+        return true;
     }
 
     private boolean collisionCheck(int x, int y) {
@@ -166,27 +178,27 @@ public class Player {
         }
     }
 
-    public void autoPlacement(Ship ship) {
+    public boolean autoPlacement(Ship ship) {
         Random r = new Random();
         int widestPosition = ship.getLength() - 1;
         boolean isHorizontal = r.nextDouble() > 0.5;
         boolean isAscending = r.nextDouble() > 0.5;
         int xStart, yStart, xEnd, yEnd;
         if (isHorizontal) {
-            xStart = r.nextInt(widestPosition, Field.FIELD_SIZE - widestPosition - 1);
-            yStart = r.nextInt(Field.FIELD_SIZE - 1);
+            xStart = r.nextInt(widestPosition - 1, Field.FIELD_SIZE - widestPosition) + 65;
+            yStart = r.nextInt(Field.FIELD_SIZE);
 
             xEnd = isAscending ? xStart + widestPosition : xStart - widestPosition;
             yEnd = yStart;
         } else {
-            xStart = r.nextInt(Field.FIELD_SIZE - 1);
-            yStart = r.nextInt(widestPosition, Field.FIELD_SIZE - widestPosition - 1);
+            xStart = r.nextInt(Field.FIELD_SIZE) + 65;
+            yStart = r.nextInt(widestPosition - 1, Field.FIELD_SIZE - widestPosition);
 
             xEnd = xStart;
             yEnd = isAscending ? yStart + widestPosition : yStart - widestPosition;
         }
         //todo: string builder
-        String placementCommand = xStart + yStart + " " + xEnd + yEnd;
-        placementAttempt(ship, placementCommand);
+        String placementCommand = String.valueOf((char) xStart) + yStart + " " + ((char) xEnd) + yEnd;
+        return placementAttempt(ship, placementCommand);
     }
 }
