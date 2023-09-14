@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Scanner;
 
 @AllArgsConstructor
@@ -51,20 +52,29 @@ public class Player {
         //todo: print out some rules
         Scanner sc = new Scanner(System.in);
         List<Ship> fleet = Ship.listOfShips();
-        int fleetHealth=0;
-        //todo: autogeneration
+        int fleetHealth = 0;
+
         for (Ship ship : fleet) {
-            placeShip(ship, sc);
-            fleetHealth+=ship.getLength();
+            if (isAutoFill) {
+                autoPlacement(ship);
+            } else {
+                placeShip(ship, sc);
+            }
+            fleetHealth += ship.getLength();
+            field.setFleetHealth(fleetHealth);
+            field.drawBoard(this.field.getField(), false);
         }
-        field.setFleetHealth(fleetHealth);
-        field.drawBoard(this.field.getField(),false);
     }
 
     private void placeShip(Ship ship, Scanner sc) {
         //todo: stringbuilder, perhaps enum toString
         System.out.println(this.name + ", please, locate your " + ship.name() + " | length: " + ship.getLength());
         String location = sc.nextLine().toUpperCase();
+        placementAttempt(ship, location);
+
+    }
+
+    private void placementAttempt(Ship ship, String location) {
         String[] squares = location.split(" ");
         Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
                 [Character.getNumericValue(squares[0].charAt(1))];
@@ -154,5 +164,29 @@ public class Player {
                         field[x + 1][y + 1].getStatus() != SquareStatus.SHIP;
             }
         }
+    }
+
+    public void autoPlacement(Ship ship) {
+        Random r = new Random();
+        int widestPosition = ship.getLength() - 1;
+        boolean isHorizontal = r.nextDouble() > 0.5;
+        boolean isAscending = r.nextDouble() > 0.5;
+        int xStart, yStart, xEnd, yEnd;
+        if (isHorizontal) {
+            xStart = r.nextInt(widestPosition, Field.FIELD_SIZE - widestPosition - 1);
+            yStart = r.nextInt(Field.FIELD_SIZE - 1);
+
+            xEnd = isAscending ? xStart + widestPosition : xStart - widestPosition;
+            yEnd = yStart;
+        } else {
+            xStart = r.nextInt(Field.FIELD_SIZE - 1);
+            yStart = r.nextInt(widestPosition, Field.FIELD_SIZE - widestPosition - 1);
+
+            xEnd = xStart;
+            yEnd = isAscending ? yStart + widestPosition : yStart - widestPosition;
+        }
+        //todo: string builder
+        String placementCommand = xStart + yStart + " " + xEnd + yEnd;
+        placementAttempt(ship, placementCommand);
     }
 }
