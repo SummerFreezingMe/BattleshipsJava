@@ -72,7 +72,7 @@ public class Game implements Runnable {
 
     //todo: custom input exceptions
     private Player initPlayer(int i, boolean isSinglePlayer) {
-        boolean autoPlaced = true;
+        boolean isAutoPlaced = true;
         String playerName;
         if (!isSinglePlayer) {
             System.out.printf("Player %d, please, input your name:%n", i);
@@ -80,11 +80,11 @@ public class Game implements Runnable {
             System.out.printf("Player %s, do you want your ships to be auto-placed(y/n)?", playerName);
             String answer = scanner.nextLine();
             if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("n")) {
-                autoPlaced = answer.equalsIgnoreCase("y");
+                isAutoPlaced = answer.equalsIgnoreCase("y");
             } else {
                 throw new ArithmeticException();
             }
         } else playerName = "Bot";
-        return new Player(playerName, isSinglePlayer, autoPlaced,Field.initField());
+        return new Player(playerName, isAutoPlaced, isSinglePlayer,Field.initField());
     }
 }
