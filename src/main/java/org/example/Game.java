@@ -1,11 +1,15 @@
 package org.example;
 
+import org.example.domain.Field;
 import org.example.domain.Player;
+import org.example.domain.Square;
+import org.example.domain.SquareStatus;
 
 import java.util.Scanner;
 
 public class Game implements Runnable {
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+    private boolean endgame=false;
 
     @Override
     public void run() {
@@ -15,6 +19,43 @@ public class Game implements Runnable {
         System.out.println(first);
         System.out.println(second);
 
+        first.placeFleet();
+        second.placeFleet();
+        while (!endgame){
+            endgame=makeMove(first,second);
+        }
+    }
+
+    private boolean makeMove(Player first, Player second) {
+        //todo: find out and declare a winner
+        return shoot(first,second.getField())||shoot(second,first.getField());
+    }
+
+    private boolean shoot(Player player, Field enemy) {
+        System.out.printf("Player %s, please, input your name: ", player.getName());
+        String shootPosition = scanner.nextLine();
+        Square[][] enemyField = enemy.getField();
+        int shotX=shootPosition.charAt(0) - 65;
+        int shotY =shootPosition.charAt(1);
+        switch (enemyField[shotX][shotX].getStatus()){
+            case CLOSED -> {
+                System.out.println("Oops! You Missed");
+                enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
+            }
+            case SHIP ->{
+                System.out.println("Nice Shot!");
+            enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
+            enemy.setFleetHealth(enemy.getFleetHealth()-1);
+            shoot(player,enemy);
+            }
+
+            default -> {
+                System.out.println("You can't shoot there, try again!");
+                shoot(player,enemy);
+            }
+
+        }
+        return enemy.getFleetHealth()==0;
     }
 
     private boolean gameModeCheck() {
@@ -43,6 +84,6 @@ public class Game implements Runnable {
                 throw new ArithmeticException();
             }
         } else playerName = "Bot";
-        return new Player(playerName, isSinglePlayer, autoPlaced);
+        return new Player(playerName, isSinglePlayer, autoPlaced,Field.initField());
     }
 }
