@@ -32,6 +32,7 @@ public class Game implements Runnable {
     }
 
     private boolean shoot(Player player, Field enemy) {
+        player.getField().drawBattlefield(enemy.getField());
         System.out.printf("Player %s, please, input your name: ", player.getName());
         String shootPosition = scanner.nextLine();
         Square[][] enemyField = enemy.getField();

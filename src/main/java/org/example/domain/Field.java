@@ -26,7 +26,12 @@ public class Field {
         return new Field(field);
     }
 
-    public void drawBoard(Square[][] board) {
+    public void drawBattlefield(Square[][] enemy){
+        drawBoard(enemy,true);
+        System.out.println("=====================================");
+        drawBoard(this.field,false);
+    }
+    public void drawBoard(Square[][] board, boolean isEnemy) {
         System.out.println("--------------------------------");
         char ch = 'A';
         for (int i = 0; i < FIELD_SIZE + 1; i++) {
@@ -39,8 +44,10 @@ public class Field {
                     System.out.print(" - ");
                 } else if (board[i][j].getStatus() == SquareStatus.REVEALED) {
                     System.out.print(" o ");
-                } else if (board[i][j].getStatus() == SquareStatus.SHIP) {
+                } else if (board[i][j].getStatus() == SquareStatus.SHOT) {
                     System.out.print(" x ");
+                }else if (board[i][j].getStatus() == SquareStatus.SHIP) {
+                    System.out.print(" " + (isEnemy ? "o" : "+") + " ");
                 }
                 if (j == 9) {
                     System.out.print(" " +i);

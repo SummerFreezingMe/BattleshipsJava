@@ -58,7 +58,7 @@ public class Player {
             fleetHealth+=ship.getLength();
         }
         field.setFleetHealth(fleetHealth);
-        field.drawBoard(this.field.getField());
+        field.drawBoard(this.field.getField(),false);
     }
 
     private void placeShip(Ship ship, Scanner sc) {
