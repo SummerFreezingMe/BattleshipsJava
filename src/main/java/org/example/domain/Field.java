@@ -20,7 +20,7 @@ public class Field {
         Square[][] field = new Square[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                field[i][j] = new Square(i + 1, j + 1, SquareStatus.CLOSED);
+                field[i][j] = new Square(i, j, SquareStatus.CLOSED);
             }
         }
         return new Field(field);
@@ -38,11 +38,11 @@ public class Field {
         for (int j = 0; j < FIELD_SIZE + 1; j++) {
             for (int i = 0; i < FIELD_SIZE + 1; i++) {
                 if (i == FIELD_SIZE) {
-                    System.out.print(" " + (ch++) + " ");
+                    System.out.print(" " + j + " ");
                     continue;
                 }
                 if (j == 10) {
-                    System.out.print(" " + i+" ");
+                    System.out.print(" " + (ch++) +" ");
                 } else {
                     if (board[i][j].getStatus() == SquareStatus.CLOSED) {
                         System.out.print(" - ");

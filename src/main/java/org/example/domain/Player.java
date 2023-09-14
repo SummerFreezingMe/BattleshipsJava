@@ -78,22 +78,22 @@ public class Player {
 
     private boolean placementAttempt(Ship ship, String location) {
         String[] squares = location.split(" ");
-        Square leftSquare = field.getField()[squares[0].charAt(0) - 66]
-                [squares[0].charAt(1) - '1'];
-        Square rightSquare = field.getField()[squares[1].charAt(0) - 66]
-                [squares[1].charAt(1) - '1'];
+        Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
+                [squares[0].charAt(1) - '0'];
+        Square rightSquare = field.getField()[squares[1].charAt(0) - 65]
+                [squares[1].charAt(1) - '0'];
         if (leftSquare.getX() == rightSquare.getX() &&
                 Math.abs(leftSquare.getY() - rightSquare.getY()) == ship.getLength() - 1) {
-            int maxY = Math.max(leftSquare.getY(), rightSquare.getY()) - 1;
-            int minY = Math.min(leftSquare.getY(), rightSquare.getY()) - 1;
+            int maxY = Math.max(leftSquare.getY(), rightSquare.getY());
+            int minY = Math.min(leftSquare.getY(), rightSquare.getY());
             for (int g = minY; g < maxY + 1; g++) {
-                if (collisionCheck(leftSquare.getX(), g)) {
+                if (!collisionCheck(leftSquare.getX(), g)) {
                     System.out.println("Uh oh, you can't put it there!");
                     return false;
                 }
             }
             for (int g = minY; g < maxY + 1; g++) {
-                field.getField()[leftSquare.getY()][g].setStatus(SquareStatus.SHIP);
+                field.getField()[leftSquare.getX()][g].setStatus(SquareStatus.SHIP);
             }
 
         } else if (leftSquare.getY() == rightSquare.getY() &&
