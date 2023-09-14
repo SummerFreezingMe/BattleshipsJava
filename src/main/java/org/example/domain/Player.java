@@ -77,6 +77,7 @@ public class Player {
     }
 
     private boolean placementAttempt(Ship ship, String location) {
+        System.out.println("///////////////////////////"+location);
         String[] squares = location.split(" ");
         Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
                 [squares[0].charAt(1) - '0'];
@@ -185,14 +186,14 @@ public class Player {
         boolean isAscending = r.nextDouble() > 0.5;
         int xStart, yStart, xEnd, yEnd;
         if (isHorizontal) {
-            xStart = r.nextInt(widestPosition - 1, Field.FIELD_SIZE - widestPosition) + 65;
+            xStart = r.nextInt(widestPosition, Field.FIELD_SIZE - widestPosition) + 65;
             yStart = r.nextInt(Field.FIELD_SIZE);
 
             xEnd = isAscending ? xStart + widestPosition : xStart - widestPosition;
             yEnd = yStart;
         } else {
             xStart = r.nextInt(Field.FIELD_SIZE) + 65;
-            yStart = r.nextInt(widestPosition - 1, Field.FIELD_SIZE - widestPosition);
+            yStart = r.nextInt(widestPosition, Field.FIELD_SIZE - widestPosition);
 
             xEnd = xStart;
             yEnd = isAscending ? yStart + widestPosition : yStart - widestPosition;
