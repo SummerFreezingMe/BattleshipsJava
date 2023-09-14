@@ -21,9 +21,20 @@ public class Game implements Runnable {
 
         first.placeFleet();
         second.placeFleet();
+        announceGameStart();
         while (!endgame){
             endgame=makeMove(first,second);
         }
+    }
+
+    private void announceGameStart() {
+        System.out.println("""
+                
+                
+                
+                
+                Time to start the game!
+                """);
     }
 
     private boolean makeMove(Player first, Player second) {
@@ -33,12 +44,12 @@ public class Game implements Runnable {
 
     private boolean shoot(Player player, Field enemy) {
         player.getField().drawBattlefield(enemy.getField());
-        System.out.printf("Player %s, please, input your name: ", player.getName());
-        String shootPosition = scanner.nextLine();
+        System.out.printf("Player %s, please, shoot your shot: ", player.getName());
+        String shootPosition = scanner.nextLine().toUpperCase();
         Square[][] enemyField = enemy.getField();
         int shotX=shootPosition.charAt(0) - 65;
-        int shotY =shootPosition.charAt(1);
-        switch (enemyField[shotX][shotX].getStatus()){
+        int shotY =shootPosition.charAt(1)- '0';
+        switch (enemyField[shotX][shotY].getStatus()){
             case CLOSED -> {
                 System.out.println("Oops! You Missed");
                 enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
