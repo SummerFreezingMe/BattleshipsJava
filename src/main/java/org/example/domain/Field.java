@@ -9,7 +9,7 @@ public class Field {
     private final Square[][] field;
 
     public static final int FIELD_SIZE = 10;
-@Setter
+    @Setter
     private int fleetHealth;
 
     public Field(Square[][] field) {
@@ -26,31 +26,33 @@ public class Field {
         return new Field(field);
     }
 
-    public void drawBattlefield(Square[][] enemy){
-        drawBoard(enemy,true);
+    public void drawBattlefield(Square[][] enemy) {
+        drawBoard(enemy, true);
         System.out.println("=====================================");
-        drawBoard(this.field,false);
+        drawBoard(this.field, false);
     }
+
     public void drawBoard(Square[][] board, boolean isEnemy) {
         System.out.println("--------------------------------");
         char ch = 'A';
-        for (int i = 0; i < FIELD_SIZE + 1; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
+        for (int j = 0; j < FIELD_SIZE + 1; j++) {
+            for (int i = 0; i < FIELD_SIZE + 1; i++) {
                 if (i == FIELD_SIZE) {
                     System.out.print(" " + (ch++) + " ");
                     continue;
                 }
-                if (board[i][j].getStatus() == SquareStatus.CLOSED) {
-                    System.out.print(" - ");
-                } else if (board[i][j].getStatus() == SquareStatus.REVEALED) {
-                    System.out.print(" o ");
-                } else if (board[i][j].getStatus() == SquareStatus.SHOT) {
-                    System.out.print(" x ");
-                }else if (board[i][j].getStatus() == SquareStatus.SHIP) {
-                    System.out.print(" " + (isEnemy ? "o" : "+") + " ");
-                }
-                if (j == 9) {
-                    System.out.print(" " +i);
+                if (j == 10) {
+                    System.out.print(" " + i+" ");
+                } else {
+                    if (board[i][j].getStatus() == SquareStatus.CLOSED) {
+                        System.out.print(" - ");
+                    } else if (board[i][j].getStatus() == SquareStatus.REVEALED) {
+                        System.out.print(" o ");
+                    } else if (board[i][j].getStatus() == SquareStatus.SHOT) {
+                        System.out.print(" x ");
+                    } else if (board[i][j].getStatus() == SquareStatus.SHIP) {
+                        System.out.print(" " + (isEnemy ? "o" : "+") + " ");
+                    }
                 }
             }
             System.out.println();
