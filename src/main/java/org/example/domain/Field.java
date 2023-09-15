@@ -3,6 +3,8 @@ package org.example.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 public class Field {
@@ -11,6 +13,8 @@ public class Field {
     public static final int FIELD_SIZE = 10;
     @Setter
     private int fleetHealth;
+    @Setter
+    private List<Ship> fleet;
 
     public Field(Square[][] field) {
         this.field = field;

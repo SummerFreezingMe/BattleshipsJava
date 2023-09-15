@@ -16,9 +16,7 @@ public enum Ship {
     private final int length;
     private final int amount;
     @Setter
-    private Square left;
-    @Setter
-    private Square right;
+    private List<Square> squares;
 
     Ship(int length, int amount) {
         this.length = length;

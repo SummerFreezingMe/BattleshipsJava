@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 @AllArgsConstructor
 @Getter
@@ -52,6 +49,7 @@ public class Player {
         //todo: print out some rules
         Scanner sc = new Scanner(System.in);
         List<Ship> fleet = Ship.listOfShips();
+        field.setFleet(fleet);
         int fleetHealth = 0;
 
         for (Ship ship : fleet) {
@@ -82,6 +80,7 @@ public class Player {
                 [squares[0].charAt(1) - '0'];
         Square rightSquare = field.getField()[squares[1].charAt(0) - 65]
                 [squares[1].charAt(1) - '0'];
+        List<Square> shipSquares = new ArrayList<>();
         if (leftSquare.getX() == rightSquare.getX() &&
                 Math.abs(leftSquare.getY() - rightSquare.getY()) == ship.getLength() - 1) {
             int maxY = Math.max(leftSquare.getY(), rightSquare.getY());
@@ -108,12 +107,12 @@ public class Player {
             }
             for (int g = minX; g < maxX + 1; g++) {
                 field.getField()[g][leftSquare.getY()].setStatus(SquareStatus.SHIP);
+                shipSquares.add(field.getField()[g][leftSquare.getY()]);
             }
         } else {
             throw new RuntimeException();
         }
-        ship.setLeft(leftSquare);
-        ship.setRight(rightSquare);
+        ship.setSquares(shipSquares);
         return true;
     }
 

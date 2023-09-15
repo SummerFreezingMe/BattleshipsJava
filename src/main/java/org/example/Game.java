@@ -1,15 +1,14 @@
 package org.example;
 
-import org.example.domain.Field;
-import org.example.domain.Player;
-import org.example.domain.Square;
-import org.example.domain.SquareStatus;
+import org.example.domain.*;
 
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Game implements Runnable {
     private final Scanner scanner = new Scanner(System.in);
-    private boolean endgame=false;
+    private boolean endgame = false;
 
     @Override
     public void run() {
@@ -22,24 +21,24 @@ public class Game implements Runnable {
         first.placeFleet();
         second.placeFleet();
         announceGameStart();
-        while (!endgame){
-            endgame=makeMove(first,second);
+        while (!endgame) {
+            endgame = makeMove(first, second);
         }
     }
 
     private void announceGameStart() {
         System.out.println("""
-                
-                
-                
-                
+                                
+                                
+                                
+                                
                 Time to start the game!
                 """);
     }
 
     private boolean makeMove(Player first, Player second) {
         //todo: find out and declare a winner
-        return shoot(first,second.getField())||shoot(second,first.getField());
+        return shoot(first, second.getField()) || shoot(second, first.getField());
     }
 
     private boolean shoot(Player player, Field enemy) {
@@ -47,27 +46,48 @@ public class Game implements Runnable {
         System.out.printf("Player %s, please, shoot your shot: ", player.getName());
         String shootPosition = scanner.nextLine().toUpperCase();
         Square[][] enemyField = enemy.getField();
-        int shotX=shootPosition.charAt(0) - 65;
-        int shotY =shootPosition.charAt(1)- '0';
-        switch (enemyField[shotX][shotY].getStatus()){
+        int shotX = shootPosition.charAt(0) - 65;
+        int shotY = shootPosition.charAt(1) - '0';
+        switch (enemyField[shotX][shotY].getStatus()) {
             case CLOSED -> {
                 System.out.println("Oops! You Missed");
                 enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
             }
-            case SHIP ->{
+            case SHIP -> {
                 System.out.println("Nice Shot!");
-            enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
-            enemy.setFleetHealth(enemy.getFleetHealth()-1);
-            shoot(player,enemy);
+                enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
+                enemy.setFleetHealth(enemy.getFleetHealth() - 1);
+                checkForDestroyedShips(enemy, enemyField[shotX][shotY]);
+                shoot(player, enemy);
             }
 
             default -> {
                 System.out.println("You can't shoot there, try again!");
-                shoot(player,enemy);
+                shoot(player, enemy);
             }
 
         }
-        return enemy.getFleetHealth()==0;
+        return enemy.getFleetHealth() == 0;
+    }
+
+    private void checkForDestroyedShips(Field enemy, Square square) {
+        //todo: add reveal of bordering waters in case of ship destruction
+        List<Ship> fleet = enemy.getFleet();
+        for (Ship ship :
+                fleet) {
+            if (ship.getSquares().contains(square)) {
+                ship.setSquares(ship.getSquares()
+                        .stream()
+                        .filter(item -> !item.equals(square))
+                        .collect(Collectors.toList()));
+            if (ship.getSquares().size()==0){
+                System.out.println(ship.name()+" has been destroyed!");
+            }
+            }
+
+        }
+
+
     }
 
     private boolean gameModeCheck() {
@@ -96,6 +116,6 @@ public class Game implements Runnable {
                 throw new ArithmeticException();
             }
         } else playerName = "Bot";
-        return new Player(playerName, isAutoPlaced, isSinglePlayer,Field.initField());
+        return new Player(playerName, isAutoPlaced, isSinglePlayer, Field.initField());
     }
 }
