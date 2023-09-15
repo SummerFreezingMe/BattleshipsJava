@@ -77,7 +77,6 @@ public class Player {
     }
 
     private boolean placementAttempt(Ship ship, String location) {
-        System.out.println("///////////////////////////"+location);
         String[] squares = location.split(" ");
         Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
                 [squares[0].charAt(1) - '0'];
@@ -88,7 +87,7 @@ public class Player {
             int maxY = Math.max(leftSquare.getY(), rightSquare.getY());
             int minY = Math.min(leftSquare.getY(), rightSquare.getY());
             for (int g = minY; g < maxY + 1; g++) {
-                if (!collisionCheck(leftSquare.getX(), g)) {
+                if (collisionCheck(leftSquare.getX(), g)) {
                     System.out.println("Uh oh, you can't put it there!");
                     return false;
                 }
@@ -102,7 +101,7 @@ public class Player {
             int maxX = Math.max(leftSquare.getX(), rightSquare.getX());
             int minX = Math.min(leftSquare.getX(), rightSquare.getX());
             for (int g = minX; g < maxX + 1; g++) {
-                if (!collisionCheck(g, leftSquare.getY())) {
+                if (collisionCheck(g, leftSquare.getY())) {
                     System.out.println("Uh oh, you can't put it there!");
                     return false;
                 }
@@ -123,58 +122,58 @@ public class Player {
         //todo: rework
         if (x == 0) {
             if (y == 0) {
-                return field[0][1].getStatus() != SquareStatus.SHIP && field[1][1].getStatus() != SquareStatus.SHIP &&
-                        field[1][0].getStatus() != SquareStatus.SHIP;
+                return field[0][1].getStatus() == SquareStatus.SHIP || field[1][1].getStatus() == SquareStatus.SHIP ||
+                        field[1][0].getStatus() == SquareStatus.SHIP;
             } else if (y == Field.FIELD_SIZE - 1) {
-                return field[0][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[1][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP;
+                return field[0][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[1][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[1][Field.FIELD_SIZE - 1].getStatus() == SquareStatus.SHIP;
 
             } else {
-                return field[0][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[1][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[1][y].getStatus() != SquareStatus.SHIP &&
-                        field[1][y + 1].getStatus() != SquareStatus.SHIP &&
-                        field[0][y + 1].getStatus() != SquareStatus.SHIP;
+                return field[0][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[1][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[1][y].getStatus() == SquareStatus.SHIP ||
+                        field[1][y + 1].getStatus() == SquareStatus.SHIP ||
+                        field[0][y + 1].getStatus() == SquareStatus.SHIP;
             }
         } else if (x == Field.FIELD_SIZE - 1) {
             if (y == 0) {
-                return field[Field.FIELD_SIZE - 1][1].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 2][1].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 1][0].getStatus() != SquareStatus.SHIP;
+                return field[Field.FIELD_SIZE - 1][1].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 2][1].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 1][0].getStatus() == SquareStatus.SHIP;
             } else if (y == Field.FIELD_SIZE - 1) {
-                return field[Field.FIELD_SIZE - 1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 2][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 2][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP;
+                return field[Field.FIELD_SIZE - 1][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 2][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 2][Field.FIELD_SIZE - 1].getStatus() == SquareStatus.SHIP;
             } else {
-                return field[Field.FIELD_SIZE - 1][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 2][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 2][y].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 2][y + 1].getStatus() != SquareStatus.SHIP &&
-                        field[Field.FIELD_SIZE - 1][y + 1].getStatus() != SquareStatus.SHIP;
+                return field[Field.FIELD_SIZE - 1][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 2][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 2][y].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 2][y + 1].getStatus() == SquareStatus.SHIP ||
+                        field[Field.FIELD_SIZE - 1][y + 1].getStatus() == SquareStatus.SHIP;
             }
         } else {
             if (y == 0) {
-                return field[x - 1][0].getStatus() != SquareStatus.SHIP &&
-                        field[x - 1][1].getStatus() != SquareStatus.SHIP &&
-                        field[x][1].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][1].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][0].getStatus() != SquareStatus.SHIP;
+                return field[x - 1][0].getStatus() == SquareStatus.SHIP ||
+                        field[x - 1][1].getStatus() == SquareStatus.SHIP ||
+                        field[x][1].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][1].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][0].getStatus() == SquareStatus.SHIP;
             } else if (y == Field.FIELD_SIZE - 1) {
-                return field[x - 1][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP &&
-                        field[x - 1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[x][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][Field.FIELD_SIZE - 2].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][Field.FIELD_SIZE - 1].getStatus() != SquareStatus.SHIP;
+                return field[x - 1][Field.FIELD_SIZE - 1].getStatus() == SquareStatus.SHIP ||
+                        field[x - 1][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[x][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][Field.FIELD_SIZE - 2].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][Field.FIELD_SIZE - 1].getStatus() == SquareStatus.SHIP;
             } else {
-                return field[x - 1][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[x][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][y - 1].getStatus() != SquareStatus.SHIP &&
-                        field[x - 1][y].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][y].getStatus() != SquareStatus.SHIP &&
-                        field[x - 1][y + 1].getStatus() != SquareStatus.SHIP &&
-                        field[x][y + 1].getStatus() != SquareStatus.SHIP &&
-                        field[x + 1][y + 1].getStatus() != SquareStatus.SHIP;
+                return field[x - 1][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[x][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][y - 1].getStatus() == SquareStatus.SHIP ||
+                        field[x - 1][y].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][y].getStatus() == SquareStatus.SHIP ||
+                        field[x - 1][y + 1].getStatus() == SquareStatus.SHIP ||
+                        field[x][y + 1].getStatus() == SquareStatus.SHIP ||
+                        field[x + 1][y + 1].getStatus() == SquareStatus.SHIP;
             }
         }
     }
