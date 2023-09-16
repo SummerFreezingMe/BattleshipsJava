@@ -38,7 +38,7 @@ public class Game implements Runnable {
 
     private boolean makeMove(Player first, Player second) {
         //todo: find out and declare a winner
-        return first.shoot(second.getField(),scanner) || second.shoot(first.getField(),scanner);
+        return first.shootInit(second.getField(),scanner) || second.shootInit(first.getField(),scanner);
     }
 
 

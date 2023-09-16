@@ -46,32 +46,37 @@ public class Player {
                 '}';
     }
 
-    public boolean shoot(Field enemy, Scanner scanner) {
+    public boolean shootInit(Field enemy, Scanner scanner) {
         this.getField().drawBattlefield(enemy.getField());
         System.out.printf("Player %s, please, shoot your shot: ", this.getName());
         String shootPosition = scanner.nextLine().toUpperCase();
-        Square[][] enemyField = enemy.getField();
+
         int shotX = shootPosition.charAt(0) - 65;
         int shotY = shootPosition.charAt(1) - '0';
+       return shoot(shotX,shotY,enemy,scanner);
+    }
+
+    boolean shoot(int shotX, int shotY, Field enemy, Scanner scanner) {
+        Square[][] enemyField = enemy.getField();
         switch (enemyField[shotX][shotY].getStatus()) {
-            case CLOSED -> {
-                System.out.println("Oops! You Missed");
-                enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
-            }
-            case SHIP -> {
-                System.out.println("Nice Shot!");
-                enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
-                enemy.setFleetHealth(enemy.getFleetHealth() - 1);
-                checkForDestroyedShips(enemy, enemyField[shotX][shotY]);
-                shoot(enemy,scanner);
-            }
-
-            default -> {
-                System.out.println("You can't shoot there, try again!");
-                shoot(enemy,scanner);
-            }
-
+        case CLOSED -> {
+            System.out.println("Oops! You Missed");
+            enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
         }
+        case SHIP -> {
+            System.out.println("Nice Shot!");
+            enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
+            enemy.setFleetHealth(enemy.getFleetHealth() - 1);
+            checkForDestroyedShips(enemy, enemyField[shotX][shotY]);
+            shootInit(enemy,scanner);
+        }
+
+        default -> {
+            System.out.println("You can't shoot there, try again!");
+            shootInit(enemy,scanner);
+        }
+
+    }
         return enemy.getFleetHealth() == 0;
     }
 
