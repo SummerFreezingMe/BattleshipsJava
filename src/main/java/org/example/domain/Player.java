@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -44,6 +45,52 @@ public class Player {
                 ", isBot=" + isBot +
                 '}';
     }
+
+    public boolean shoot(Field enemy, Scanner scanner) {
+        this.getField().drawBattlefield(enemy.getField());
+        System.out.printf("Player %s, please, shoot your shot: ", this.getName());
+        String shootPosition = scanner.nextLine().toUpperCase();
+        Square[][] enemyField = enemy.getField();
+        int shotX = shootPosition.charAt(0) - 65;
+        int shotY = shootPosition.charAt(1) - '0';
+        switch (enemyField[shotX][shotY].getStatus()) {
+            case CLOSED -> {
+                System.out.println("Oops! You Missed");
+                enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
+            }
+            case SHIP -> {
+                System.out.println("Nice Shot!");
+                enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
+                enemy.setFleetHealth(enemy.getFleetHealth() - 1);
+                checkForDestroyedShips(enemy, enemyField[shotX][shotY]);
+                shoot(enemy,scanner);
+            }
+
+            default -> {
+                System.out.println("You can't shoot there, try again!");
+                shoot(enemy,scanner);
+            }
+
+        }
+        return enemy.getFleetHealth() == 0;
+    }
+
+    private void checkForDestroyedShips(Field enemy, Square square) {
+        //todo: add reveal of bordering waters in case of ship destruction
+        List<Ship> fleet = enemy.getFleet();
+        for (Ship ship :
+                fleet) {
+            if (ship.getSquares().contains(square)) {
+                ship.setSquares(ship.getSquares()
+                        .stream()
+                        .filter(item -> !item.equals(square))
+                        .collect(Collectors.toList()));
+                if (ship.getSquares().size()==0){
+                    System.out.println(ship.name()+" has been destroyed!");
+                }
+            }
+
+        }}
 
     public void placeFleet() {
         //todo: print out some rules

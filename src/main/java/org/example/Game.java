@@ -1,10 +1,10 @@
 package org.example;
 
-import org.example.domain.*;
+import org.example.domain.Bot;
+import org.example.domain.Field;
+import org.example.domain.Player;
 
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Game implements Runnable {
     private final Scanner scanner = new Scanner(System.in);
@@ -38,57 +38,12 @@ public class Game implements Runnable {
 
     private boolean makeMove(Player first, Player second) {
         //todo: find out and declare a winner
-        return shoot(first, second.getField()) || shoot(second, first.getField());
+        return first.shoot(second.getField(),scanner) || second.shoot(first.getField(),scanner);
     }
 
-    private boolean shoot(Player player, Field enemy) {
-        player.getField().drawBattlefield(enemy.getField());
-        System.out.printf("Player %s, please, shoot your shot: ", player.getName());
-        String shootPosition = scanner.nextLine().toUpperCase();
-        Square[][] enemyField = enemy.getField();
-        int shotX = shootPosition.charAt(0) - 65;
-        int shotY = shootPosition.charAt(1) - '0';
-        switch (enemyField[shotX][shotY].getStatus()) {
-            case CLOSED -> {
-                System.out.println("Oops! You Missed");
-                enemyField[shotX][shotY].setStatus(SquareStatus.REVEALED);
-            }
-            case SHIP -> {
-                System.out.println("Nice Shot!");
-                enemyField[shotX][shotY].setStatus(SquareStatus.SHOT);
-                enemy.setFleetHealth(enemy.getFleetHealth() - 1);
-                checkForDestroyedShips(enemy, enemyField[shotX][shotY]);
-                shoot(player, enemy);
-            }
-
-            default -> {
-                System.out.println("You can't shoot there, try again!");
-                shoot(player, enemy);
-            }
-
-        }
-        return enemy.getFleetHealth() == 0;
-    }
-
-    private void checkForDestroyedShips(Field enemy, Square square) {
-        //todo: add reveal of bordering waters in case of ship destruction
-        List<Ship> fleet = enemy.getFleet();
-        for (Ship ship :
-                fleet) {
-            if (ship.getSquares().contains(square)) {
-                ship.setSquares(ship.getSquares()
-                        .stream()
-                        .filter(item -> !item.equals(square))
-                        .collect(Collectors.toList()));
-            if (ship.getSquares().size()==0){
-                System.out.println(ship.name()+" has been destroyed!");
-            }
-            }
-
-        }
 
 
-    }
+
 
     private boolean gameModeCheck() {
         System.out.println("Choose player's amount (1/2):");
@@ -103,7 +58,7 @@ public class Game implements Runnable {
 
     //todo: custom input exceptions
     private Player initPlayer(int i, boolean isSinglePlayer) {
-        boolean isAutoPlaced = true;
+        boolean isAutoPlaced;
         String playerName;
         if (!isSinglePlayer) {
             System.out.printf("Player %d, please, input your name:%n", i);
@@ -115,7 +70,9 @@ public class Game implements Runnable {
             } else {
                 throw new ArithmeticException();
             }
-        } else playerName = "Bot";
-        return new Player(playerName, isAutoPlaced, isSinglePlayer, Field.initField());
+            return new Player(playerName, isAutoPlaced, false, Field.initField());
+        }
+        else return new Bot("Bot", true, true, Field.initField());
+
     }
 }
