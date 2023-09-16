@@ -55,7 +55,7 @@ public class Field {
                     } else if (board[i][j].getStatus() == SquareStatus.SHOT) {
                         System.out.print(" x ");
                     } else if (board[i][j].getStatus() == SquareStatus.SHIP) {
-                        System.out.print(" " + (isEnemy ? "o" : "+") + " ");
+                        System.out.print(" " + (isEnemy ? "-" : "+") + " ");
                     }
                 }
             }
