@@ -27,6 +27,24 @@ public class Game implements Runnable {
         while (!endgame) {
             endgame = makeMove(first, second);
         }
+        endgame(first,second);
+    }
+
+    /**
+     * End of the game
+     * @param first first {@link Field}
+     * @param second second {@link Field}
+     */
+    private void endgame(Player first, Player second) {
+        System.out.println("Game Over!");
+        String winner;
+        if (first.getField().getFleet().size()==0){
+            winner  = second.getName();
+        }
+        else if(second.getField().getFleet().size()==0){
+            winner  = first.getName();
+        }else {throw new RuntimeException();}
+        System.out.println("Winner: "+winner);
     }
 
     /**
