@@ -24,6 +24,15 @@ public enum Ship {
 
     }
 
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "length=" + length +
+                ", amount=" + amount +
+                ", squares=" + squares +
+                '}';
+    }
+
     /**
      * Initialize list of ships that builds the fleet
      * @return list of ships

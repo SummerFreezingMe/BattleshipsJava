@@ -3,6 +3,7 @@ package org.example.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -15,6 +16,35 @@ public class Field {
     private int fleetHealth;
     @Setter
     private List<Ship> fleet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Field field1 = (Field) o;
+
+        if (getFleetHealth() != field1.getFleetHealth()) return false;
+        if (!Arrays.deepEquals(getField(), field1.getField())) return false;
+        return getFleet() != null ? getFleet().equals(field1.getFleet()) : field1.getFleet() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.deepHashCode(getField());
+        result = 31 * result + getFleetHealth();
+        result = 31 * result + (getFleet() != null ? getFleet().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "field=" + Arrays.toString(field) +
+                ", fleetHealth=" + fleetHealth +
+                ", fleet=" + fleet +
+                '}';
+    }
 
     public Field(Square[][] field) {
         this.field = field;
