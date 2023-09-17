@@ -19,8 +19,7 @@ public class Game implements Runnable {
         boolean isSinglePlayer = gameModeCheck();
         Player first = initPlayer(1, false);
         Player second = initPlayer(2, isSinglePlayer);
-        System.out.println(first);
-        System.out.println(second);
+        shipPlacementInfo();
 
         first.placeFleet();
         second.placeFleet();
@@ -30,6 +29,16 @@ public class Game implements Runnable {
         }
         endgame(first,second);
     }
+
+    /**
+     * Print info about fleet placement
+     */
+    private void shipPlacementInfo() {
+        System.out.println("""
+              To place your ships write two coordinates on the
+              distance of the size of current ship.
+              two coordinates should be separated with a space.
+              Speedboats should be initialized with one coordinate repeated twice""");}
 
     /**
      * End of the game
@@ -58,6 +67,7 @@ public class Game implements Runnable {
                                 
                                 
                 Time to start the game!
+                Write name of the square you want to shoot
                 """);
     }
 

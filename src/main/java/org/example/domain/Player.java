@@ -118,7 +118,6 @@ public class Player {
      * Placing your fleet
      */
     public void placeFleet() {
-        //todo: print out some rules
         Scanner sc = new Scanner(System.in);
         List<Ship> fleet = Ship.listOfShips();
         field.setFleet(fleet);
