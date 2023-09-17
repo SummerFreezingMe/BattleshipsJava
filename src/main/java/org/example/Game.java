@@ -3,6 +3,7 @@ package org.example;
 import org.example.domain.Bot;
 import org.example.domain.Field;
 import org.example.domain.Player;
+import org.example.exceptions.WrongCommandException;
 
 import java.util.Scanner;
 
@@ -61,7 +62,6 @@ public class Game implements Runnable {
     }
 
     private boolean makeMove(Player first, Player second) {
-        //todo: find out and declare a winner
         return first.shootInit(second.getField(),scanner) || second.shootInit(first.getField(),scanner);
     }
 
@@ -77,7 +77,7 @@ public class Game implements Runnable {
         if (playersAmount == 2 || playersAmount == 1) {
             return playersAmount == 1;
         } else {
-            throw new ArithmeticException();
+            throw new WrongCommandException(playersAmount);
         }
     }
 
@@ -86,7 +86,6 @@ public class Game implements Runnable {
      * @param isSinglePlayer true if single-player, false if 2 players
      * @return initialized  {@link Player}.
      */
-    //todo: custom input exceptions
     private Player initPlayer(int i, boolean isSinglePlayer) {
         boolean isAutoPlaced;
         String playerName;
@@ -98,7 +97,7 @@ public class Game implements Runnable {
             if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("n")) {
                 isAutoPlaced = answer.equalsIgnoreCase("y");
             } else {
-                throw new ArithmeticException();
+                throw new WrongCommandException(answer);
             }
             return new Player(playerName, isAutoPlaced, false, Field.initField());
         }
