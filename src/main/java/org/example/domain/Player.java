@@ -46,6 +46,12 @@ public class Player {
                 '}';
     }
 
+    /**
+     * Initialization of the shot
+     * @param enemy {@link Field} of the enemy
+     * @param scanner {@link Scanner} to scan placement command
+     * @return true if game is ended, false otherwise
+     */
     public boolean shootInit(Field enemy, Scanner scanner) {
         this.getField().drawBattlefield(enemy.getField());
         System.out.printf("Player %s, please, shoot your shot: ", this.getName());
@@ -56,6 +62,14 @@ public class Player {
        return shoot(shotX,shotY,enemy,scanner);
     }
 
+    /**
+     * Shoot a shot to a chosen {@link Square}
+     * @param shotX x {@link Square} coordinate
+     * @param shotY Y {@link Square} coordinate
+     * @param enemy {@link Field} of the enemy
+     * @param scanner {@link Scanner} to scan placement command
+     * @return true if game is ended, false otherwise
+     */
     boolean shoot(int shotX, int shotY, Field enemy, Scanner scanner) {
         Square[][] enemyField = enemy.getField();
         switch (enemyField[shotX][shotY].getStatus()) {
@@ -70,16 +84,19 @@ public class Player {
             checkForDestroyedShips(enemy, enemyField[shotX][shotY]);
             shootInit(enemy,scanner);
         }
-
         default -> {
             System.out.println("You can't shoot there, try again!");
             shootInit(enemy,scanner);
         }
-
     }
         return enemy.getFleetHealth() == 0;
     }
 
+    /**
+     * Checking if the {@link Ship} got destroyed after successful hit
+     * @param enemy {@link Field} of the enemy
+     * @param square {@link Square} that got shot
+     */
     private void checkForDestroyedShips(Field enemy, Square square) {
         //todo: add reveal of bordering waters in case of ship destruction
         List<Ship> fleet = enemy.getFleet();
@@ -94,9 +111,12 @@ public class Player {
                     System.out.println(ship.name()+" has been destroyed!");
                 }
             }
+        }
+    }
 
-        }}
-
+    /**
+     * Placing your fleet
+     */
     public void placeFleet() {
         //todo: print out some rules
         Scanner sc = new Scanner(System.in);
@@ -110,7 +130,7 @@ public class Player {
                 if (isAutoFill) {
                     placed = autoPlacement(ship);
                 } else {
-                    placed = placeShip(ship, sc);
+                    placed = receivePlacementCommand(ship, sc);
                 }
                 fleetHealth += ship.getLength();
             }
@@ -119,13 +139,25 @@ public class Player {
         }
     }
 
-    private boolean placeShip(Ship ship, Scanner sc) {
+    /**
+     * Receive placement command from {@link Player}
+     * @param ship {@link Ship} to place
+     * @param sc {@link Scanner} to scan placement command
+     * @return true if attempt of placement succeeded, false otherwise
+     */
+    private boolean receivePlacementCommand(Ship ship, Scanner sc) {
         //todo: stringbuilder, perhaps enum toString
         System.out.println(this.name + ", please, locate your " + ship.name() + " | length: " + ship.getLength());
         String location = sc.nextLine().toUpperCase();
         return placementAttempt(ship, location);
     }
 
+    /**
+     * Attempt to place a {@link Ship}
+     * @param ship {@link Ship} to place
+     * @param location command with a location to place {@link Ship}
+     * @return true if attempt of placement succeeded, false otherwise
+     */
     private boolean placementAttempt(Ship ship, String location) {
         String[] squares = location.split(" ");
         Square leftSquare = field.getField()[squares[0].charAt(0) - 65]
@@ -168,6 +200,12 @@ public class Player {
         return true;
     }
 
+    /**
+     * Check for collisions while attempting to place a {@link Ship}
+     * @param x x {@link Square} coordinate
+     * @param y y {@link Square} coordinate
+     * @return true if there is collision, false otherwise
+     */
     private boolean collisionCheck(int x, int y) {
         Square[][] field = getField().getField();
         //todo: rework
@@ -229,6 +267,11 @@ public class Player {
         }
     }
 
+    /**
+     * Autoplacement of {@link Ship}
+     * @param ship  {@link Ship} to place
+     * @return true if attempt of placement succeeded, false otherwise
+     */
     public boolean autoPlacement(Ship ship) {
         Random r = new Random();
         int widestPosition = ship.getLength() - 1;

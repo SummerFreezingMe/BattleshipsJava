@@ -8,6 +8,12 @@ public class Bot extends Player{
         super(name, isAutoFill, isBot, field);
     }
 
+    /**
+     * Special initialization of the shot for {@link Bot}
+     * @param enemy   {@link Field} of the enemy
+     * @param scanner {@link Scanner} to scan placement command
+     * @return true if game is ended, false otherwise
+     */
     @Override
     public boolean shootInit(Field enemy, Scanner scanner) {
         Random r = new Random();

@@ -10,6 +10,9 @@ public class Game implements Runnable {
     private final Scanner scanner = new Scanner(System.in);
     private boolean endgame = false;
 
+    /**
+     * Starts the game
+     */
     @Override
     public void run() {
         boolean isSinglePlayer = gameModeCheck();
@@ -26,6 +29,9 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * Small message signalizing game start
+     */
     private void announceGameStart() {
         System.out.println("""
                                 
@@ -42,9 +48,10 @@ public class Game implements Runnable {
     }
 
 
-
-
-
+    /**
+     * Checking what kind of game mode is chosen
+     * @return true if single-player, false if 2 players
+     */
     private boolean gameModeCheck() {
         System.out.println("Choose player's amount (1/2):");
         int playersAmount = scanner.nextInt();
@@ -56,6 +63,11 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * @param i order of a player (first or second)
+     * @param isSinglePlayer true if single-player, false if 2 players
+     * @return initialized  {@link Player}.
+     */
     //todo: custom input exceptions
     private Player initPlayer(int i, boolean isSinglePlayer) {
         boolean isAutoPlaced;
