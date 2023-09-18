@@ -37,7 +37,8 @@ public class Game implements Runnable {
               To place your ships write two coordinates on the
               distance of the size of current ship.
               two coordinates should be separated with a space.
-              Speedboats should be initialized with one coordinate repeated twice""");}
+              Speedboats should be initialized with one coordinate repeated twice
+              """);}
 
     /**
      * End of the game
@@ -77,7 +78,8 @@ public class Game implements Runnable {
      * @return true if game is ended, false otherwise
      */
     private boolean makeMove(Player first, Player second) {
-        return first.shootInit(second.getField(),scanner) || second.shootInit(first.getField(),scanner);
+        return first.shootInit(second.getField(),scanner) ||
+                second.shootInit(first.getField(),scanner);
     }
 
 
@@ -107,7 +109,8 @@ public class Game implements Runnable {
         if (!isSinglePlayer) {
             System.out.printf("Player %d, please, input your name:%n", i);
             playerName = scanner.nextLine();
-            System.out.printf("Player %s, do you want your ships to be auto-placed(y/n)?", playerName);
+            System.out.printf("Player %s, do you want your ships to be auto-placed(y/n)?",
+                    playerName);
             String answer = scanner.nextLine();
             if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("n")) {
                 isAutoPlaced = answer.equalsIgnoreCase("y");

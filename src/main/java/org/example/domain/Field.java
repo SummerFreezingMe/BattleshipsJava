@@ -26,7 +26,9 @@ public class Field {
 
         if (getFleetHealth() != field1.getFleetHealth()) return false;
         if (!Arrays.deepEquals(getField(), field1.getField())) return false;
-        return getFleet() != null ? getFleet().equals(field1.getFleet()) : field1.getFleet() == null;
+        return getFleet() != null
+                ? getFleet().equals(field1.getFleet())
+                : field1.getFleet() == null;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class Field {
 
     /**
      * Initialize {@link Field}
+     *
      * @return {@link Field} instance
      */
     public static Field initField() {
@@ -66,6 +69,7 @@ public class Field {
 
     /**
      * Draw the whole battlefield
+     *
      * @param enemy {@link Field} of the enemy
      */
     public void drawBattlefield(Square[][] enemy) {
@@ -76,7 +80,8 @@ public class Field {
 
     /**
      * Draw single board
-     * @param board board to draw
+     *
+     * @param board   board to draw
      * @param isEnemy true is this field are of the enemy, false otherwise
      */
     public void drawBoard(Square[][] board, boolean isEnemy) {
@@ -89,7 +94,7 @@ public class Field {
                     continue;
                 }
                 if (j == 10) {
-                    System.out.print(" " + (ch++) +" ");
+                    System.out.print(" " + (ch++) + " ");
                 } else {
                     if (board[i][j].getStatus() == SquareStatus.CLOSED) {
                         System.out.print(" - ");

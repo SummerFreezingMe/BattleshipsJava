@@ -35,6 +35,7 @@ public enum Ship {
 
     /**
      * Initialize list of ships that builds the fleet
+     *
      * @return list of ships
      */
     public static List<Ship> listOfShips() {
