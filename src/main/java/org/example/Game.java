@@ -9,23 +9,22 @@ import java.util.Scanner;
 
 public class Game implements Runnable {
     private final Scanner scanner = new Scanner(System.in);
-    private boolean endgame = false;
 
     /**
      * Starts the game
      */
     @Override
     public void run() {
+        boolean isEndgame = false;
         boolean isSinglePlayer = gameModeCheck();
         Player first = initPlayer(1, false);
         Player second = initPlayer(2, isSinglePlayer);
         shipPlacementInfo();
-
         first.placeFleet();
         second.placeFleet();
         announceGameStart();
-        while (!endgame) {
-            endgame = makeMove(first, second);
+        while (!isEndgame) {
+            isEndgame = makeMove(first, second);
         }
         endgame(first,second);
     }
@@ -47,14 +46,14 @@ public class Game implements Runnable {
      */
     private void endgame(Player first, Player second) {
         System.out.println("Game Over!");
-        String winner;
+        String winnerName;
         if (first.getField().getFleet().size()==0){
-            winner  = second.getName();
+            winnerName  = second.getName();
         }
         else if(second.getField().getFleet().size()==0){
-            winner  = first.getName();
+            winnerName  = first.getName();
         }else {throw new RuntimeException();}
-        System.out.println("Winner: "+winner);
+        System.out.println("Winner: "+winnerName);
     }
 
     /**
@@ -71,6 +70,12 @@ public class Game implements Runnable {
                 """);
     }
 
+    /**
+     * Players making moves in turns
+     * @param first first player
+     * @param second second player
+     * @return true if game is ended, false otherwise
+     */
     private boolean makeMove(Player first, Player second) {
         return first.shootInit(second.getField(),scanner) || second.shootInit(first.getField(),scanner);
     }
